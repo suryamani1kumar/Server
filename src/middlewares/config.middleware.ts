@@ -1,10 +1,10 @@
-import authenticateApiKey from "./header.Auth";
-import cors from "cors";
-import express, { RequestHandler } from "express";
+// import authenticateApiKey from './header.Auth';
+import cors from 'cors';
+import express, { RequestHandler } from 'express';
 
 const middlewares: RequestHandler[] = [
   cors(),
-  authenticateApiKey,
+  // authenticateApiKey,
   express.json(),
 ];
 
