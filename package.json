@@ -1,10 +1,10 @@
 {
   "name": "node",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.ts",
   "scripts": {
-    "build": "npx tsc",
-    "start": "node src/server.js",
+    "build": "tsc",
+    "start": "node dist/server.js",
     "dev": "nodemon src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
