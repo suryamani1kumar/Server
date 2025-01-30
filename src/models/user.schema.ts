@@ -1,17 +1,53 @@
-import * as Mongoose from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
-const CreateUserSchema = new Mongoose.Schema(
+interface IUser extends Document {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  role: "admin" | "superadmin" | "editor" | "viewer";
+  isActive: boolean;
+  lastLogin: Date | null;
+}
+
+const CreateUserSchema: Schema<IUser> = new Schema(
   {
-    Name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    activated: { type: Boolean, required: true, default: true },
-    roles: {
+    name: { type: String, required: true, trim: true },
+    username: {
       type: String,
-      default: "user",
-      required: false,
+      unique: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    password: { type: String, required: true },
+    role: {
+      type: String,
+      enum: ["admin", "superadmin", "editor", "viewer"],
+      default: "admin",
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    lastLogin: {
+      type: Date,
     },
   },
   { timestamps: true }
 );
-export const User = Mongoose.model("CreateUser", CreateUserSchema);
+CreateUserSchema.pre("save", async function (next) {
+  if (!this.username) {
+    const baseUsername = this.email.split("@")[0].replace(/\s+/g, "");
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    this.username = `${baseUsername}${randomNum}`;
+  }
+
+  next();
+});
+export const User = mongoose.model("CreateUser", CreateUserSchema);
