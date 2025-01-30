@@ -1,12 +1,12 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-// import connectToDataBase from './DBConnection';
+import connectToDataBase from './DBConnection';
 import userRoutes from './routes/user.routes';
 import configMiddlewares from './middlewares/config.middleware';
 
 const app: Express = express();
 dotenv.config();
-// connectToDataBase();
+connectToDataBase();
 
 configMiddlewares.forEach((middlewares) => app.use(middlewares));
 
