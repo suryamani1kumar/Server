@@ -22,10 +22,10 @@ import cookieParser from 'cookie-parser';
 
 const middlewares: RequestHandler[] = [
   cors(),
-  cookieParser(),
+  express.json(),
+  // cookieParser(),
   // setCookieMiddleware,
   authenticateApiKey,
-  express.json(),
 ];
 
 export default middlewares;

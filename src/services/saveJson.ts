@@ -1,8 +1,8 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 const filePathName = (fileName: string) => {
-  return path.join("src", "data", fileName);
+  return path.join('src', 'data', fileName);
 };
 
 const saveJsonToFile = (fileName: string, data: any): void => {
@@ -10,14 +10,14 @@ const saveJsonToFile = (fileName: string, data: any): void => {
     let existingData: any[] = [];
     const existfile = fs.existsSync(filePathName(fileName));
     if (existfile) {
-      const fileContent = fs.readFileSync(filePathName(fileName), "utf8");
+      const fileContent = fs.readFileSync(filePathName(fileName), 'utf8');
       existingData = fileContent ? JSON.parse(fileContent) : [];
     }
     existingData.push(data);
     const insertData = JSON.stringify(existingData, null, 2);
-    fs.writeFileSync(filePathName(fileName), insertData, "utf8");
+    fs.writeFileSync(filePathName(fileName), insertData, 'utf8');
   } catch (errorMessage) {
-    console.error("Error writing to file:", errorMessage);
+    console.error('Error writing to file:', errorMessage);
   }
 };
 
