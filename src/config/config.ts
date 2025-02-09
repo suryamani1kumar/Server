@@ -3,7 +3,7 @@ import path from 'path';
 
 const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
 
-dotenv.config({ path: path.resolve(__dirname, envFile) });
+dotenv.config({ path: path.resolve(process.cwd(), envFile) });
 
 export const config = {
   PORT: process.env.PORT || 5000,
