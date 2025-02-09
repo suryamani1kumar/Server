@@ -1,0 +1,14 @@
+[
+  {
+    "name": "suryamani kumar",
+    "email": "triploom@gmail.com",
+    "password": "triploom_1234",
+    "role": "superadmin"
+  },
+  {
+    "name": "suryamani kumar",
+    "email": "suryamani@gmail.com",
+    "password": "triploom_1234",
+    "role": "admin"
+  }
+]
