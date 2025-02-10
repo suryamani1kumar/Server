@@ -14,10 +14,14 @@ export const userLogin = async (req: Request, res: Response) => {
       user.username.trim().toLowerCase() === userIdOrmail.trim().toLowerCase()
   );
 
-  if (!findUser) return res.status(404).json({ message: "user does not exist" });
+  if (!findUser){  
+    res.status(404).json({ message: "user does not exist" });
+    return
+                }
   const checkPassword = await comparePassword(password, findUser.password);
-  if (!checkPassword)
-    return res.status(400).json({ message: "Invalid credentials" });
+  if (!checkPassword){
+     res.status(400).json({ message: "Invalid credentials" });return
+  }
   const accessToken = generateAccessToken(req.body);
   const refreshToken = generateRefreshToken(req.body);
   res.cookie("accessToken", accessToken, {
