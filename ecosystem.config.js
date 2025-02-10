@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'triploomserver',
       script: 'dist/server.js', // Ensure TypeScript compiles to `dist/`
-      instances: 'max', // Use all available CPU cores
+      instances: 1, // Use all available CPU cores
       exec_mode: 'cluster', // Runs multiple instances for scalability
       watch: false, // Set to `true` if you want automatic reloads on changes
       env: {
