@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import usersData from "../../data/usersData.json";
 import { comparePassword } from "../../services/password";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../../services/token";
 
 export const userLogin = async (req: Request, res: Response) => {
   const { password, userIdOrmail } = req.body;
@@ -10,15 +14,22 @@ export const userLogin = async (req: Request, res: Response) => {
       user.username.trim().toLowerCase() === userIdOrmail.trim().toLowerCase()
   );
 
-  if (!findUser) {
-    res.send("User is not exist");
-    return;
-  }
+  if (!findUser) return res.status(404).json({ message: "user does not exist" });
   const checkPassword = await comparePassword(password, findUser.password);
-  if (!checkPassword) {
-    res.send("Password is not match");
-    return;
-  }
+  if (!checkPassword)
+    return res.status(400).json({ message: "Invalid credentials" });
+  const accessToken = generateAccessToken(req.body);
+  const refreshToken = generateRefreshToken(req.body);
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+  });
 
-  res.send("ok");
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+  });
+  res.status(200).json({ message: "Login successful!" });
 };
