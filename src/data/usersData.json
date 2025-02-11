@@ -1,14 +1,13 @@
 [
   {
     "name": "suryamani kumar",
-    "email": "triploom@gmail.com",
-    "password": "triploom_1234",
-    "role": "superadmin"
-  },
-  {
-    "name": "suryamani kumar",
-    "email": "suryamani@gmail.com",
-    "password": "triploom_1234",
-    "role": "admin"
+    "email": "suryamani12@gmail.com",
+    "password": "$2b$10$NwRSdFpEDroGHhVb1HRGq.ncOZCagJ4LJq2mvy23GtTi/7rE1VA6i",
+    "role": "admin",
+    "username": "suryamani121009",
+    "id": "18ae011b-c02b-417d-b625-c2a9a54e564f",
+    "isActive": true,
+    "createdAt": "2025-02-10T16:28:30.888Z",
+    "updatedAt": "2025-02-10T16:28:30.888Z"
   }
 ]
