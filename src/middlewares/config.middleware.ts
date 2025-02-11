@@ -23,7 +23,7 @@ import cookieParser from 'cookie-parser';
 const middlewares: RequestHandler[] = [
   cors(),
   express.json(),
-  // cookieParser(),
+  cookieParser(),
   // setCookieMiddleware,
   authenticateApiKey,
 ];
