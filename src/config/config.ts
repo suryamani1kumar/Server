@@ -12,7 +12,7 @@ export const config = {
     DB_NAME: process.env.DB_NAME || 'mongodb://localhost:27017',
   },
   ACCESS_TOKEN_SECRET:
-    process.env.ACCESS_TOKEN_SECRET || 'tripLoom_8001_development',
+    process.env.ACCESS_TOKEN_SECRET || 'tripLoom_5000_development',
   REFRESH_TOKEN_SECRET:
-    process.env.REFRESH_TOKEN_SECRET || 'Triploom#8001#development',
+    process.env.REFRESH_TOKEN_SECRET || 'Triploom#5000#development',
 };
