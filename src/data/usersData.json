@@ -1,13 +1,14 @@
 [
   {
-    "name": "suryamani kumar",
-    "email": "suryamani12@gmail.com",
-    "password": "$2b$10$NwRSdFpEDroGHhVb1HRGq.ncOZCagJ4LJq2mvy23GtTi/7rE1VA6i",
-    "role": "admin",
-    "username": "suryamani121009",
-    "id": "18ae011b-c02b-417d-b625-c2a9a54e564f",
+    "name": "triploom",
+    "email": "triploom@gmail.com",
+    "password": "$2b$10$mhdXN0m02WSipozkF2UpxebXoaf6MNfTnf8rKuo4VoNVSq.xQCjv.",
+    "role": "superadmin",
+    "username": "triploom5170",
     "isActive": true,
-    "createdAt": "2025-02-10T16:28:30.888Z",
-    "updatedAt": "2025-02-10T16:28:30.888Z"
+    "Lastlogin": "2025-02-12T07:29:31.313Z",
+    "id": "6bd784db-2d26-4d72-983d-2da1dff5e69a",
+    "createdAt": "2025-02-12T07:28:50.520Z",
+    "updatedAt": "2025-02-12T07:28:50.520Z"
   }
 ]

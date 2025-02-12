@@ -1,9 +1,8 @@
-import { Request, Response } from "express";
-import saveJsonToFile from "../../services/saveJson";
-import usersData from "../../data/usersData.json";
-import { v4 as uuid } from "uuid";
-import { hashPassword } from "../../services/password";
-import { Usertype } from "../../services/type";
+import { Request, Response } from 'express';
+import saveJsonToFile from '../../services/saveJson';
+import usersData from '../../data/usersData.json';
+import { hashPassword } from '../../services/password';
+import { Usertype } from '../../services/type';
 
 const UsersData = usersData as Usertype[];
 
@@ -14,19 +13,16 @@ export const CreateUser = async (req: Request, res: Response) => {
       user.email.trim().toLowerCase() === req.body.email.trim().toLowerCase()
   );
   if (findUser) {
-    res.status(302).json({ message: "User exists, please log in" });
+    res.status(302).json({ message: 'User exists, please log in' });
     return;
   }
   const hashedPassword = await hashPassword(RequestData.password);
-  const baseUsername = RequestData.email.split("@")[0].replace(/\s+/g, "");
+  const baseUsername = RequestData.email.split('@')[0].replace(/\s+/g, '');
   const randomNum = Math.floor(1000 + Math.random() * 9000);
   RequestData.password = hashedPassword;
   RequestData.username = `${baseUsername}${randomNum}`;
-  RequestData.id = uuid();
   RequestData.isActive = true;
-  RequestData.createdAt = new Date().toISOString();
-  RequestData.updatedAt = RequestData.createdAt;
-  RequestData.Lastlogin = "";
-  saveJsonToFile("usersData.json", req.body);
-  res.status(200).json({ message: "User registered ", user: findUser });
+  RequestData.Lastlogin = '';
+  saveJsonToFile('usersData.json', req.body);
+  res.status(200).json({ message: 'User registered ', user: findUser });
 };
