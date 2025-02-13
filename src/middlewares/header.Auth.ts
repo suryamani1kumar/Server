@@ -6,7 +6,7 @@ const authenticateApiKey = (
   res: Response,
   next: NextFunction
 ): void => {
-  const apiKey = req.headers['api-header-key'];
+  const apiKey = req.headers['api-key'];
   if (apiKey !== config.API_HEADER_KEY) {
     res.status(403).json({ message: 'Invalid API Key' });
     return;
