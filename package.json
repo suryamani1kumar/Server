@@ -20,20 +20,24 @@
     "@types/jsonwebtoken": "^9.0.8",
     "@types/node": "^22.10.5",
     "@types/uuid": "^10.0.0",
+    "@types/winston": "^2.4.4",
     "cross-env": "^7.0.3",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "apollo-server-express": "^3.13.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "graphql": "^16.10.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.3",
     "pm2": "^5.4.3",
-    "uuid": "^11.0.5"
+    "uuid": "^11.0.5",
+    "winston": "^3.17.0"
   }
 }
