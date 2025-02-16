@@ -1,12 +1,12 @@
-import { Request, Response } from "express";
-import usersData from "../../data/usersData.json";
-import { comparePassword } from "../../services/password";
+import { Request, Response } from 'express';
+import usersData from '../../data/usersData.json';
+import { comparePassword } from '../../services/password';
 import {
   generateAccessToken,
   generateRefreshToken,
-} from "../../services/token";
-import { Usertype } from "../../services/type";
-import { updateJsonFile } from "../../services/saveJson";
+} from '../../services/token';
+import { Usertype } from '../../services/type';
+import { updateJsonFile } from '../../services/saveJson';
 
 const UsersData = usersData as Usertype[];
 
@@ -16,7 +16,7 @@ export const userLogin = async (req: Request, res: Response) => {
   if (!userIdOrmail || !password) {
     res
       .status(400)
-      .json({ message: "Email/Username and Password are required" });
+      .json({ message: 'Email/Username and Password are required' });
     return;
   }
 
@@ -27,13 +27,13 @@ export const userLogin = async (req: Request, res: Response) => {
   );
 
   if (!findUser) {
-    res.status(404).json({ message: "user does not exist" });
+    res.status(404).json({ message: 'user does not exist' });
     return;
   }
 
   const checkPassword = await comparePassword(password, findUser.password);
   if (!checkPassword) {
-    res.status(400).json({ message: "Invalid credentials" });
+    res.status(400).json({ message: 'Password not match' });
     return;
   }
 
@@ -41,23 +41,23 @@ export const userLogin = async (req: Request, res: Response) => {
   const refreshToken = generateRefreshToken(req.body);
 
   updateJsonFile(
-    "usersData.json",
+    'usersData.json',
     findUser.id,
-    "Lastlogin",
+    'Lastlogin',
     new Date().toISOString()
   );
 
-  res.cookie("a_token", accessToken, {
+  res.cookie('a_token', accessToken, {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: 'strict',
   });
 
-  res.cookie("r_token", refreshToken, {
+  res.cookie('r_token', refreshToken, {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: 'strict',
   });
 
-  res.status(200).json({ message: "Login successful!" });
+  res.status(200).json({ message: 'Login successful!' });
 };
