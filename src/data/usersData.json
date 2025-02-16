@@ -2,13 +2,13 @@
   {
     "name": "triploom",
     "email": "triploom@gmail.com",
-    "password": "$2b$10$mhdXN0m02WSipozkF2UpxebXoaf6MNfTnf8rKuo4VoNVSq.xQCjv.",
+    "password": "$2b$10$XktFu4c/ufHekatqXNmRluXgAhOZHOULmRvt2XDduxxMzwK1Va2ZS",
     "role": "superadmin",
-    "username": "triploom5170",
+    "username": "triploom8873",
     "isActive": true,
-    "Lastlogin": "2025-02-12T07:29:31.313Z",
-    "id": "6bd784db-2d26-4d72-983d-2da1dff5e69a",
-    "createdAt": "2025-02-12T07:28:50.520Z",
-    "updatedAt": "2025-02-12T07:28:50.520Z"
+    "Lastlogin": "2025-02-16T14:37:51.540Z",
+    "id": "b3093530-4e13-4d8e-b47a-d4dc63ba15ac",
+    "createdAt": "2025-02-16T10:51:37.702Z",
+    "updatedAt": "2025-02-16T10:51:37.702Z"
   }
 ]
