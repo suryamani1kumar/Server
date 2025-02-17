@@ -48,13 +48,13 @@ export const userLogin = async (req: Request, res: Response) => {
   );
 
   res.cookie('a_token', accessToken, {
-    httpOnly: true,
+    // httpOnly: true,
     secure: true,
     sameSite: 'strict',
   });
 
   res.cookie('r_token', refreshToken, {
-    httpOnly: true,
+    // httpOnly: true,
     secure: true,
     sameSite: 'strict',
   });
