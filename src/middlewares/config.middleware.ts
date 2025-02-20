@@ -2,13 +2,10 @@ import authenticateApiKey from './header.Auth';
 import cors from 'cors';
 import express, { RequestHandler } from 'express';
 import cookieParser from 'cookie-parser';
+import { config } from '../config/config';
 
 const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'https://admincrm-three.vercel.app',
-  ],
+  origin: config.ORIGIN,
   credentials: true,
 };
 

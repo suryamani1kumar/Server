@@ -1,14 +1,14 @@
-import cluster from "cluster";
-import os from "os";
-import app from "./app";
-import { config } from "./config/config";
+import cluster from 'cluster';
+import os from 'os';
+import app from './app';
+import { config } from './config/config';
 
 const numberOfCUP = os.cpus().length;
 if (cluster.isPrimary) {
   for (let i = 0; i < numberOfCUP; i++) {
     cluster.fork();
   }
-  cluster.on("exit", (worker) => {
+  cluster.on('exit', (worker) => {
     console.log(`Worker ${worker.process.pid} died. Restarting...`);
     cluster.fork();
   });
