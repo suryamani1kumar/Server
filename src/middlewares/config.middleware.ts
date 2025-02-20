@@ -7,7 +7,7 @@ const corsOptions = {
   origin: [
     'http://localhost:3000',
     'http://localhost:5173',
-    'https://triploomserver.onrender.com',
+    'https://admincrm-three.vercel.app',
   ],
   credentials: true,
 };
