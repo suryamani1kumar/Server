@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema } from 'mongoose';
 
 interface IFAQ {
   ques: string;
@@ -14,7 +14,7 @@ export interface IBlog extends Document {
   pageUrl: string;
   heading: string;
   category: string;
-  status: boolean;
+  active: boolean;
   faqs: IFAQ[];
   authorName: string;
   authorDescription: string;
@@ -32,7 +32,7 @@ const BlogSchema: Schema<IBlog> = new Schema(
     pageUrl: { type: String, required: true, unique: true },
     heading: { type: String, required: true },
     category: { type: String, required: true },
-    status: { type: Boolean, default: true },
+    active: { type: Boolean, default: true },
     userid: { type: String, required: true },
     faqs: [
       {
@@ -46,4 +46,4 @@ const BlogSchema: Schema<IBlog> = new Schema(
   { timestamps: true }
 );
 
-export const Blogs = mongoose.model<IBlog>("Blog", BlogSchema);
+export const Blogs = mongoose.model<IBlog>('Blog', BlogSchema);
