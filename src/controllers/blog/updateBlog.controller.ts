@@ -22,10 +22,10 @@ export const updateBlog = async (req: Request, res: Response) => {
 export const blogStatus = async (req: Request, res: Response) => {
   try {
     const pageUrl = req.query.pageurl;
-    const Active = req.query.Active;
+    const active = req.query.Active;
     const updatedBlog = await Blogs.findOneAndUpdate(
       { pageUrl },
-      { Active },
+      { active },
       {
         new: true,
       }
