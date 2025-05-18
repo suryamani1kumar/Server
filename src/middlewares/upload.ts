@@ -26,18 +26,18 @@ const fileFilter = (
   file: Express.Multer.File,
   cb: FileFilterCallback
 ) => {
-  const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+  const allowedTypes = ["image/webp", "image/png", "application/pdf"];
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Only images (JPEG, PNG) and PDFs are allowed"));
+    cb(new Error("Only images (Webp, PNG) and PDFs are allowed"));
   }
 };
 
 // Configure Multer
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 2 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: 1 * 1024 * 1024 }, // 5MB limit
   fileFilter: fileFilter,
 });
 
