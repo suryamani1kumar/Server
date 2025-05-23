@@ -1,8 +1,8 @@
-import mongoose, { Document, Schema, Types } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
-export interface IsubCategory extends Document {
+interface IsubCategory {
   categoryName: string;
-  categoryUrl: Types.ObjectId;
+  categoryUrl: string;
 }
 
 const subCategorySchema = new Schema({
@@ -10,20 +10,13 @@ const subCategorySchema = new Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true,
   },
   categoryUrl: {
-    type: Schema.Types.ObjectId,
-    ref: "category",
+    type: String,
     required: true,
     trim: true,
-    unique: true,
   },
 });
-export const subCategory = mongoose.model<Icategory>(
-  "subCategory",
-  subCategorySchema
-);
 
 export interface Icategory extends Document {
   categoryName: string;
@@ -31,7 +24,7 @@ export interface Icategory extends Document {
   description: string;
   image: string;
   userid: string;
-  subCategory: Types.ObjectId[];
+  subCategory: IsubCategory[];
 }
 
 const categorySchema = new Schema(
@@ -55,10 +48,7 @@ const categorySchema = new Schema(
       type: String,
     },
     userid: { type: String, required: true },
-    subCategory: {
-      type: Schema.Types.ObjectId,
-      ref: "subCategory",
-    },
+    subCategory: [subCategorySchema],
   },
   { timestamps: true }
 );
