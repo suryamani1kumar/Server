@@ -3,13 +3,16 @@ import { category } from "../../models/category.schema";
 
 export const AddSubCategory = async (req: Request, res: Response) => {
   try {
-    console.log(req.params.id);
-    const dats = await category.findOneAndUpdate({
-      _id: req.params.id,
-      subCategory: [req.body],
-    });
-    console.log("dats", dats);
-    res.status(200).json({ message: "Internal server error", data: "dtata" });
+    const { subcategory } = req.body;
+    const { id } = req.params;
+    
+    const subCategory = await category.findByIdAndUpdate(
+      id,
+      { $push: { subCategory: { $each: subcategory } } },
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json({ message: "Create subCategory", data: subCategory });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }
