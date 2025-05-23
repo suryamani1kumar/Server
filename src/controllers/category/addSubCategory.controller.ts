@@ -3,11 +3,15 @@ import { category } from "../../models/category.schema";
 
 export const AddSubCategory = async (req: Request, res: Response) => {
   try {
-    const { subcategory } = req.body;
+    const { subcategory, active } = req.body;
     const { id } = req.params;
     
+    // if (!active) {
+    //   return res.status(200).json({ message: "Category is not Active" });
+    // }
+
     const subCategory = await category.findByIdAndUpdate(
-      id,
+      { _id: id },
       { $push: { subCategory: { $each: subcategory } } },
       { new: true, runValidators: true }
     );
