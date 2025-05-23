@@ -30,6 +30,7 @@ export interface Icategory extends Document {
   categoryUrl: string;
   description: string;
   image: string;
+  userid: string;
   subCategory: Types.ObjectId[];
 }
 
@@ -53,6 +54,7 @@ const categorySchema = new Schema(
     image: {
       type: String,
     },
+    userid: { type: String, required: true },
     subCategory: {
       type: Schema.Types.ObjectId,
       ref: "subCategory",
