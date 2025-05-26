@@ -3,6 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 interface IsubCategory {
   categoryName: string;
   categoryUrl: string;
+  active: boolean;
 }
 
 const subCategorySchema = new Schema({
@@ -14,6 +15,7 @@ const subCategorySchema = new Schema({
     type: String,
     trim: true,
   },
+  active: { type: Boolean, default: true },
 });
 
 export interface Icategory extends Document {
