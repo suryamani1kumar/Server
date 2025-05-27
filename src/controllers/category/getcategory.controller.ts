@@ -19,3 +19,18 @@ export const getCategoryById = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error", error });
   }
 };
+
+export const searchCategory = async (req: Request, res: Response) => {
+  try {
+    const name = req.query.name
+    const Category = await category.find({
+      $or: [
+        { categoryName: { $regex: name, $options: 'i' } },
+        { categoryUrl: { $regex: name, $options: 'i' } }
+      ]
+    }, { createdAt: 0, updatedAt: 0, __v: 0, description: 0, image: 0, userid: 0, });
+    res.status(200).json({ message: "category data", data: Category });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
