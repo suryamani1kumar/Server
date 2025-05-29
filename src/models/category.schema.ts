@@ -22,7 +22,7 @@ export interface Icategory extends Document {
   categoryName: string;
   categoryUrl: string;
   description: string;
-  image: string;
+  image: string[];
   userid: string;
   subCategory: IsubCategory[];
   active: boolean;
@@ -45,9 +45,7 @@ const categorySchema = new Schema(
     description: {
       type: String,
     },
-    image: {
-      type: String,
-    },
+    image: [{ type: String }],
     active: { type: Boolean, default: true },
     userid: { type: String, required: true },
     subCategory: [subCategorySchema],
