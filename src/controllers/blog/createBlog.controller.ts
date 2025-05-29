@@ -10,8 +10,49 @@ export const createBlog = async (req: Request, res: Response) => {
       (image: Express.Multer.File) =>
         `${config.SERVER_URL}/uploads/${image.filename}`
     );
-    saveJsonToFile("blogData.json", { ...req.body, Images });
-    const createblog = await new Blogs({ ...req.body, Images });
+    const { content,
+      metaTitle,
+      metaDescription,
+      metaKeyword,
+      pageUrl,
+      heading,
+      category,
+      active,
+      faqs,
+      authorName,
+      authorDescription,
+      userid, } = req.body
+    const faq = JSON.parse(faqs)
+    // saveJsonToFile("blogData.json", {
+    //   content,
+    //   metaTitle,
+    //   metaDescription,
+    //   metaKeyword,
+    //   pageUrl,
+    //   heading,
+    //   category,
+    //   active,
+    //   faqs: faq,
+    //   images: Images,
+    //   authorName,
+    //   authorDescription,
+    //   userid,
+    // });
+    const createblog = await new Blogs({
+      content,
+      metaTitle,
+      metaDescription,
+      metaKeyword,
+      pageUrl,
+      heading,
+      category,
+      active,
+      faqs: faq,
+      images: Images,
+      authorName,
+      authorDescription,
+      userid,
+    });
 
     await createblog.save();
 
