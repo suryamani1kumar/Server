@@ -4,6 +4,13 @@ import fs from "fs";
 import sharp from "sharp";
 import { config } from "../../config/config";
 
+//  MIME type mapping
+const mimeMap: Record<string, string> = {
+  ".png": "image/png",
+  ".webp": "image/webp",
+  ".pdf": "application/pdf",
+};
+
 export const uploadImage = async (
   req: Request,
   res: Response
@@ -44,10 +51,14 @@ export const getImage = async (req: Request, res: Response): Promise<any> => {
         fit: "inside", // or 'cover', 'fill', etc.
       });
     }
+    const pathext = path.extname(filename).toLowerCase();
 
-    const buffer = await image.toBuffer();
-    res.set("Content-Type", "image/webp");
-    res.send(buffer);
+    const mimeType: string = mimeMap[pathext];
+
+    res.setHeader("Content-Type", mimeType);
+
+    const stream = fs.createReadStream(imagePath);
+    stream.pipe(res);
   } catch (err) {
     res.status(500).send(err);
   }
