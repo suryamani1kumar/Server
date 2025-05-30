@@ -7,9 +7,9 @@ export const AddCategory = async (req: Request, res: Response) => {
     const file = req.files;
     const Images = (file as Array<Express.Multer.File>)?.map(
       (image: Express.Multer.File) =>
-        `${config.SERVER_URL}/uploads/${image.filename}`
+        `${config.SERVER_URL}/image/${image.filename}?w=200`
     );
-    console.log(req.body,Images)
+    console.log(req.body, Images);
     // const categoryData = new category({ ...req.body, image: Images });
     // const savedData = await categoryData.save();
     // res.status(200).json({ message: "Create category", data: savedData });

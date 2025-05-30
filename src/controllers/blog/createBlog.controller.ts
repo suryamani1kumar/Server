@@ -8,9 +8,10 @@ export const createBlog = async (req: Request, res: Response) => {
     const file = req.files;
     const Images = (file as Array<Express.Multer.File>)?.map(
       (image: Express.Multer.File) =>
-        `${config.SERVER_URL}/uploads/${image.filename}`
+        `${config.SERVER_URL}/image/${image.filename}?w=200`
     );
-    const { content,
+    const {
+      content,
       metaTitle,
       metaDescription,
       metaKeyword,
@@ -21,8 +22,9 @@ export const createBlog = async (req: Request, res: Response) => {
       faqs,
       authorName,
       authorDescription,
-      userid, } = req.body
-    const faq = JSON.parse(faqs)
+      userid,
+    } = req.body;
+    const faq = JSON.parse(faqs);
     // saveJsonToFile("blogData.json", {
     //   content,
     //   metaTitle,

@@ -4,7 +4,7 @@ import path from "path";
 import fs from "fs";
 
 // create image dir
-const uploadDir = path.join(process.cwd(), "uploads");
+const uploadDir = path.join(process.cwd(), "public");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
