@@ -7,6 +7,8 @@ interface IUser extends Document {
   password: string;
   role: "admin" | "superadmin" | "editor" | "viewer";
   isActive: boolean;
+  userid: string;
+  permission: string[]
   lastLogin: Date | null;
 }
 
@@ -26,6 +28,8 @@ const CreateUserSchema: Schema<IUser> = new Schema(
       trim: true,
     },
     password: { type: String, required: true },
+    userid: { type: String, required: true },
+    permission: [{ type: String }],
     role: {
       type: String,
       enum: ["admin", "superadmin", "editor", "viewer"],

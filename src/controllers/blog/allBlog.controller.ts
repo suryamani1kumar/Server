@@ -6,11 +6,11 @@ export const allBlog = async (req: Request, res: Response) => {
     const page: number = parseInt(req.query.page as string) || 1;
     const limit: number = parseInt(req.query.limit as string) || 4;
     const blog = await Blogs.find(
-      {},
-      { pageUrl: 1, heading: 1, category: 1, active: 1 },
-      {
-        new: true,
-      }
+      // {},
+      // { pageUrl: 1, heading: 1, category: 1, active: 1 },
+      // {
+      //   new: true,
+      // }
     )
       .skip((page - 1) * limit)
       .limit(limit)
