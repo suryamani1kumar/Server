@@ -11,7 +11,7 @@ connectToDataBase();
 app.use("/image/:filename", getImage);
 
 // public Routes
-app.use("/api", publicRoutes);
+// app.use("/api", publicRoutes);
 
 configMiddlewares.forEach((middlewares) => app.use(middlewares));
 

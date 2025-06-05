@@ -3,6 +3,6 @@ import { trackingpixel } from "../controllers/tracking/trackingpixel.controller"
 
 const router = Router();
 
-router.get("/track", trackingpixel);
+router.post("/track", trackingpixel);
 
 export default router;
