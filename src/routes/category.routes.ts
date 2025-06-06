@@ -2,7 +2,7 @@ import { Router } from "express";
 import { AddCategory } from "../controllers/category/addCategory.controller";
 import { AddSubCategory } from "../controllers/category/addSubCategory.controller";
 import upload from "../middlewares/upload";
-import { getCategory, getCategoryById, searchCategory } from "../controllers/category/getcategory.controller";
+import { getCategory, getCategoryById, searchCategory } from "../controllers/category/getCategory.controller";
 
 
 const router = Router();
