@@ -1,20 +1,32 @@
 import dotenv from "dotenv";
-import path from "path";
 
-const envFile = `.env.${process.env.NODE_ENV}`;
+dotenv.config(); // just load the single .env file
 
-dotenv.config({ path: path.resolve(process.cwd(), envFile) });
+// Parse ORIGIN safely (as string[]), default to empty array if missing
+const parsedOrigin: string[] = process.env.ORIGIN
+  ? JSON.parse(process.env.ORIGIN)
+  : [];
 
-const parsedOrigin = JSON.parse(process.env.ORIGIN as string);
+// Helper to require environment variables and fail fast if missing
+function requireEnv(key: string): string {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(`Missing environment variable: ${key}`);
+  }
+  return value;
+}
 
 export const config = {
-  PORT: process.env.PORT,
-  API_HEADER_KEY: process.env.API_HEADER_KEY,
+  PORT: Number(requireEnv("PORT")),
+  API_HEADER_KEY: requireEnv("API_HEADER_KEY"),
+
   DATABASE: {
-    DB_NAME: process.env.DB_NAME,
+    DB_NAME: requireEnv("DB_NAME"),
   },
-  ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET as string,
-  REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET as string,
+
+  ACCESS_TOKEN_SECRET: requireEnv("ACCESS_TOKEN_SECRET"),
+  REFRESH_TOKEN_SECRET: requireEnv("REFRESH_TOKEN_SECRET"),
+
   ORIGIN: parsedOrigin,
-  SERVER_URL: process.env.SERVER_URL,
-};
+  SERVER_URL: requireEnv("SERVER_URL"),
+} as const;
