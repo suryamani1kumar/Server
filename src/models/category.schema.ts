@@ -1,56 +1,89 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 
-interface IsubCategory {
-  categoryName: string;
-  categoryUrl: string;
-  active: boolean;
-}
-
-const subCategorySchema = new Schema({
-  categoryName: {
-    type: String,
-    trim: true,
-  },
-  categoryUrl: {
-    type: String,
-    trim: true,
-  },
-  active: { type: Boolean, default: true },
-});
-
-export interface Icategory extends Document {
-  categoryName: string;
-  categoryUrl: string;
-  description: string;
+export interface ICategory extends Document {
+  name: string;
+  slug: string;
+  description?: string;
   image: string[];
   userid: string;
-  subCategory: IsubCategory[];
+  parent: Types.ObjectId | null;
   active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const categorySchema = new Schema(
+const categorySchema = new Schema<ICategory>(
   {
-    categoryName: {
+    name: {
       type: String,
       required: true,
       trim: true,
-      unique: true,
     },
-    categoryUrl: {
+
+    slug: {
       type: String,
       required: true,
       trim: true,
-      unique: true,
+      lowercase: true,
     },
+
     description: {
       type: String,
+      trim: true,
     },
-    image: [{ type: String }],
-    active: { type: Boolean, default: true },
-    userid: { type: String, required: true },
-    subCategory: [subCategorySchema],
+
+    image: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+
+    userid: {
+      type: String,
+      required: true,
+      index: true,
+    },
+
+    parent: {
+      type: Schema.Types.ObjectId,
+      ref: "Category",
+      default: null,
+      index: true,
+      set: (value: any) => {
+        if (value === "null" || value === "" || value === undefined) {
+          return null;
+        }
+        return value;
+      },
+    },
+
+    active: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );
 
-export const category = mongoose.model<Icategory>("category", categorySchema);
+categorySchema.pre<ICategory>("save", async function (next) {
+  let parentId: Types.ObjectId | null = this.parent as Types.ObjectId | null;
+  const currentId = this._id as Types.ObjectId;
+
+  while (parentId) {
+    if (parentId.equals(currentId)) {
+      return next(new Error("Circular category reference detected"));
+    }
+
+    const parent = await mongoose
+      .model<ICategory>("Category")
+      .findById(parentId)
+      .select("parent");
+
+    parentId = parent?.parent ? (parent.parent as Types.ObjectId) : null;
+  }
+
+  next();
+});
+
+export const Category = mongoose.model<ICategory>("Category", categorySchema);
