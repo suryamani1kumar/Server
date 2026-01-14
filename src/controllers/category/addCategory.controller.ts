@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { category } from "../../models/category.schema";
+import { Category } from "../../models/category.schema";
 import { config } from "../../config/config";
 
 export const AddCategory = async (req: Request, res: Response) => {
@@ -9,7 +9,7 @@ export const AddCategory = async (req: Request, res: Response) => {
       (image: Express.Multer.File) =>
         `${config.SERVER_URL}/image/${image.filename}?w=200`
     );
-    const categoryData = new category({ ...req.body, image: Images });
+    const categoryData = new Category({ ...req.body, image: Images });
     const savedData = await categoryData.save();
     res.status(200).json({ message: "Create category", data: savedData });
   } catch (error) {
