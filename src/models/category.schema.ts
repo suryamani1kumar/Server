@@ -87,3 +87,4 @@ categorySchema.pre<ICategory>("save", async function (next) {
 });
 
 export const Category = mongoose.model<ICategory>("Category", categorySchema);
+
