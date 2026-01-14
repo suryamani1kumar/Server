@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema, Types } from "mongoose";
 
 interface IFAQ {
   ques: string;
@@ -13,13 +13,13 @@ export interface IBlog extends Document {
   metaKeyword: string;
   pageUrl: string;
   heading: string;
-  category: string;
+  category: Types.ObjectId;
   active: boolean;
   faqs: IFAQ[];
   images: string[];
   authorName: string;
   authorDescription: string;
-  userid: string;
+  userid: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -32,9 +32,9 @@ const BlogSchema: Schema<IBlog> = new Schema(
     metaKeyword: { type: String, required: true },
     pageUrl: { type: String, required: true, unique: true },
     heading: { type: String, required: true },
-    category: { type: String, required: true },
+    category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
     active: { type: Boolean, default: true },
-    userid: { type: String, required: true },
+    userid: { type: Schema.Types.ObjectId, ref: "User", required: true },
     faqs: [
       {
         ques: { type: String },
