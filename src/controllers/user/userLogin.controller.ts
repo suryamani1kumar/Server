@@ -61,7 +61,7 @@ export const userLogin = async (req: Request, res: Response): Promise<void> => {
     } else {
       cookieOptions.secure = true;
       cookieOptions.sameSite = "none";
-      cookieOptions.domain = "admincrm-three.vercel.app";
+     // cookieOptions.domain = "admincrm-three.vercel.app";
     }
 
     res.cookie("accessToken", accessToken, cookieOptions);
