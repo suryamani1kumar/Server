@@ -1,25 +1,46 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema, Model } from "mongoose";
+import bcrypt from "bcrypt";
 
-interface IUser extends Document {
+/**
+ * User Document Interface
+ */
+export interface IUser {
   name: string;
   username: string;
   email: string;
   password: string;
   role: "admin" | "superadmin" | "editor" | "viewer";
   isActive: boolean;
-  userid: string;
-  permission: string[]
-  lastLogin: Date | null;
+  permission: string[];
+  lastLogin?: Date;
 }
 
-const CreateUserSchema: Schema<IUser> = new Schema(
+/**
+ * User Methods Interface
+ */
+export interface IUserMethods {
+  comparePassword(password: string): Promise<boolean>;
+}
+
+/**
+ * Combined Document Type
+ */
+export type IUserDocument = mongoose.HydratedDocument<IUser, IUserMethods>;
+
+/**
+ * Schema
+ */
+const CreateUserSchema = new Schema<IUser, Model<IUser, {}, IUserMethods>>(
   {
     name: { type: String, required: true, trim: true },
+
     username: {
       type: String,
       unique: true,
       trim: true,
+      required: true,
     },
+
     email: {
       type: String,
       required: true,
@@ -27,32 +48,65 @@ const CreateUserSchema: Schema<IUser> = new Schema(
       lowercase: true,
       trim: true,
     },
+
     password: { type: String, required: true },
-    userid: { type: String, required: true },
-    permission: [{ type: String }],
+
+    permission: {
+      type: [String],
+      default: [],
+    },
+
     role: {
       type: String,
       enum: ["admin", "superadmin", "editor", "viewer"],
       default: "admin",
     },
+
     isActive: {
       type: Boolean,
       default: true,
     },
+
     lastLogin: {
       type: Date,
+      default: null,
     },
   },
   { timestamps: true }
 );
+
+/**
+ * Pre-save Hook (password hashing)
+ */
 CreateUserSchema.pre("save", async function (next) {
-  if (!this.username) {
-    const baseUsername = this.email.split("@")[0].replace(/\s+/g, "");
-    const randomNum = Math.floor(1000 + Math.random() * 9000);
-    this.username = `${baseUsername}${randomNum}`;
+  const user = this as IUserDocument;
+
+  if (!user.isModified("password")) {
+    return next();
   }
 
-  next();
+  try {
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
+    next();
+  } catch (error) {
+    next(error as Error);
+  }
 });
-export const User = mongoose.model("User", CreateUserSchema);
 
+/**
+ * Compare Password Method
+ */
+CreateUserSchema.methods.comparePassword = async function (
+  password: string
+): Promise<boolean> {
+  return bcrypt.compare(password, this.password);
+};
+
+/**
+ * Model
+ */
+export const User = mongoose.model<IUser, Model<IUser, {}, IUserMethods>>(
+  "User",
+  CreateUserSchema
+);
