@@ -6,7 +6,10 @@ import { config } from "../config/config";
 export interface AuthRequest extends Request {
   user?: {
     userId: string;
-    role: "admin" | "superadmin" | "editor" | "viewer" | "user";
+    name: string;
+    username: string;
+    email: string;
+    role: string;
   };
 }
 
@@ -18,7 +21,7 @@ export interface AuthRequest extends Request {
 export const authMiddleware = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const accessToken = req.cookies?.accessToken;
@@ -35,7 +38,7 @@ export const authMiddleware = async (
       // Try access token first
       decoded = jwt.verify(
         accessToken!,
-        config.ACCESS_TOKEN_SECRET as string
+        config.ACCESS_TOKEN_SECRET as string,
       ) as AuthRequest["user"];
 
       req.user = decoded;
@@ -50,7 +53,7 @@ export const authMiddleware = async (
 
       decoded = jwt.verify(
         refreshToken,
-        config.REFRESH_TOKEN_SECRET as string
+        config.REFRESH_TOKEN_SECRET as string,
       ) as AuthRequest["user"];
 
       req.user = decoded;
