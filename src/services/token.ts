@@ -6,7 +6,10 @@ import { config } from "../config/config";
  */
 export interface IJwtPayload {
   userId: string;
-  role?: "admin" | "superadmin" | "editor" | "viewer";
+  name: string;
+  username: string;
+  email: string;
+  role: string;
 }
 
 /**
@@ -24,7 +27,7 @@ export const generateAccessToken = (payload: IJwtPayload): string => {
  * Generate Refresh Token
  */
 export const generateRefreshToken = (
-  payload: Pick<IJwtPayload, "userId">
+  payload: Pick<IJwtPayload, "userId">,
 ): string => {
   const options: SignOptions = {
     expiresIn: "4d",
