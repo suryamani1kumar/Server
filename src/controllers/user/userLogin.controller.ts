@@ -41,6 +41,9 @@ export const userLogin = async (req: Request, res: Response): Promise<void> => {
     });
 
     const accessToken = generateAccessToken({
+      name: findUser.name,
+      username: findUser.username,
+      email: findUser.email,
       userId: findUser._id.toString(),
       role: findUser.role,
     });
@@ -61,7 +64,7 @@ export const userLogin = async (req: Request, res: Response): Promise<void> => {
     } else {
       cookieOptions.secure = true;
       cookieOptions.sameSite = "none";
-     // cookieOptions.domain = "admincrm-three.vercel.app";
+      // cookieOptions.domain = "admincrm-three.vercel.app";
     }
 
     res.cookie("accessToken", accessToken, cookieOptions);
@@ -85,7 +88,6 @@ export const userLogin = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-
 export const authVerify = (req: AuthRequest, res: Response): void => {
   if (!req.user) {
     res.status(401).json({ message: "Not authorized" });
@@ -95,9 +97,7 @@ export const authVerify = (req: AuthRequest, res: Response): void => {
   res.status(200).json({
     message: "User is authenticated",
     user: {
-      userId: req.user.userId,
-      role: req.user.role,
+      ...req.user,
     },
   });
 };
-
