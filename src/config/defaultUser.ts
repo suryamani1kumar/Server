@@ -7,7 +7,7 @@ const defaultUser = async (): Promise<void> => {
   try {
     // Check if admin user already exists
     const existingUser = await User.findOne({
-      $or: [{ role: "admin" }, { username: "admin" }], //"admin" | "superadmin" | "editor" | "viewer"
+      $or: [{ role: "superadmin" }, { username: "superadmin" }],
     });
 
     if (existingUser) {
@@ -16,11 +16,11 @@ const defaultUser = async (): Promise<void> => {
 
     // Create Admin User
     const adminUser = new User({
-      name: "Admin",
-      username: "admin",
-      email: "admin@example.com",
-      password: "Admin@123",
-      role: "admin",
+      name: "superadmin",
+      username: "superadmin",
+      email: "superadmin@example.com",
+      password: "superadmin@123",
+      role: "superadmin",
       isActive: true,
       permission: ["all"],
       lastLogin: new Date(),
