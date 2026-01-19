@@ -9,7 +9,7 @@ export interface IUser {
   username: string;
   email: string;
   password: string;
-  role: "admin" | "superadmin" | "editor" | "viewer";
+  role: "admin" | "superadmin" | "manager" | "user";
   isActive: boolean;
   permission: string[];
   lastLogin?: Date;
@@ -58,8 +58,8 @@ const CreateUserSchema = new Schema<IUser, Model<IUser, {}, IUserMethods>>(
 
     role: {
       type: String,
-      enum: ["admin", "superadmin", "editor", "viewer"],
-      default: "admin",
+      enum: ["admin", "superadmin", "manager", "user"],
+      default: "user",
     },
 
     isActive: {
@@ -72,7 +72,7 @@ const CreateUserSchema = new Schema<IUser, Model<IUser, {}, IUserMethods>>(
       default: null,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 /**
@@ -98,7 +98,7 @@ CreateUserSchema.pre("save", async function (next) {
  * Compare Password Method
  */
 CreateUserSchema.methods.comparePassword = async function (
-  password: string
+  password: string,
 ): Promise<boolean> {
   return bcrypt.compare(password, this.password);
 };
@@ -108,5 +108,5 @@ CreateUserSchema.methods.comparePassword = async function (
  */
 export const User = mongoose.model<IUser, Model<IUser, {}, IUserMethods>>(
   "User",
-  CreateUserSchema
+  CreateUserSchema,
 );
