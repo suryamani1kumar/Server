@@ -4,13 +4,22 @@ import { config } from "../../config/config";
 
 export const updateBlog = async (req: Request, res: Response) => {
   try {
-    const UpdatepageUrl = req.query.pageurl;
-    const file = req.files;
-    const Images = (file as Array<Express.Multer.File>)?.map(
-      (image: Express.Multer.File) =>
-        `${config.SERVER_URL}/image/${image.filename}?w=200`
-    );
+    const { pageurl } = req.query;
 
+    if (!pageurl || typeof pageurl !== "string") {
+      res.status(400).json({ message: "pageurl is required" });
+      return;
+    }
+
+    /* ---------- Files (Images) ---------- */
+    const files = req.files as Express.Multer.File[] | undefined;
+
+    const images =
+      files?.map(
+        (file) => `${config.SERVER_URL}/image/${file.filename}?w=200`,
+      ) || [];
+
+    /* ---------- Body ---------- */
     const {
       content,
       metaTitle,
@@ -25,36 +34,57 @@ export const updateBlog = async (req: Request, res: Response) => {
       authorDescription,
       userid,
     } = req.body;
-    const faq = JSON.parse(faqs);
+
+    /* ---------- Safe FAQ Parsing ---------- */
+    let parsedFaqs: any[] = [];
+    if (faqs) {
+      try {
+        parsedFaqs = typeof faqs === "string" ? JSON.parse(faqs) : faqs;
+      } catch {
+        res.status(400).json({ message: "Invalid FAQs format" });
+        return;
+      }
+    }
+
+    /* ---------- Update ---------- */
     const updatedBlog = await Blogs.findOneAndUpdate(
-      { pageUrl: UpdatepageUrl },
+      { pageUrl: pageurl },
       {
-        content,
-        metaTitle,
-        metaDescription,
-        metaKeyword,
-        pageUrl,
-        heading,
-        category,
-        active,
-        faqs: faq,
-        images: Images,
-        authorName,
-        authorDescription,
-        userid,
+        $set: {
+          content,
+          metaTitle,
+          metaDescription,
+          metaKeyword,
+          pageUrl,
+          heading,
+          category,
+          active,
+          faqs: parsedFaqs,
+          ...(images.length > 0 && { images }),
+          authorName,
+          authorDescription,
+          userid,
+        },
       },
       {
         new: true,
-      }
+        runValidators: true,
+      },
     );
 
     if (!updatedBlog) {
       res.status(404).json({ message: "Blog not found" });
       return;
     }
-    res.status(200).json({ message: "blog updated", blog: updatedBlog });
+
+    res
+      .status(200)
+      .json({ message: "Blog updated successfully", blog: updatedBlog });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    console.error("Update Blog Error:", error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
   }
 };
 
@@ -67,7 +97,7 @@ export const blogStatus = async (req: Request, res: Response) => {
       { active },
       {
         new: true,
-      }
+      },
     );
 
     if (!updatedBlog) {
