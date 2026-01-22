@@ -14,12 +14,11 @@ export interface IBlog extends Document {
   pageUrl: string;
   heading: string;
   category: Types.ObjectId;
-  active: boolean;
+  author: Types.ObjectId;
+  isActive: boolean;
   faqs: IFAQ[];
   images: string[];
-  authorName: string;
-  authorDescription: string;
-  userid: Types.ObjectId;
+  createdBy: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,8 +32,9 @@ const BlogSchema: Schema<IBlog> = new Schema(
     pageUrl: { type: String, required: true, unique: true },
     heading: { type: String, required: true },
     category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
-    active: { type: Boolean, default: true },
-    userid: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    author: { type: Schema.Types.ObjectId, ref: "Author" },
+    isActive: { type: Boolean, default: false },
+    createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     faqs: [
       {
         ques: { type: String },
@@ -42,10 +42,8 @@ const BlogSchema: Schema<IBlog> = new Schema(
       },
     ],
     images: [{ type: String }],
-    authorName: { type: String },
-    authorDescription: { type: String },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const Blogs = mongoose.model<IBlog>("Blog", BlogSchema);
