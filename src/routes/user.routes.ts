@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { CreateUser } from "../controllers/user/createUser.controller";
+import {
+  CreateUser,
+  deleteUser,
+  HandlePassword,
+} from "../controllers/user/createUser.controller";
 import {
   authVerify,
   userLogin,
@@ -11,16 +15,29 @@ import {
   userStatus,
 } from "../controllers/user/updateUser.controller";
 import { authMiddleware } from "../middlewares/auth.middleware";
+// import { roleMiddleware } from "../middlewares/config.middleware";
 
 const router = Router();
 
-router.post("/createUser", CreateUser);
-router.get("/getuser", getUser);
-router.get("/getsingleuser", singleUser);
-router.patch("/userStatus", userStatus);
-router.put("/updateUser", updateUser);
+/*  PUBLIC ROUTES  */
 router.post("/login", userLogin);
-router.get("/logout", logout);
+
+/*  AUTHENTICATED ROUTES   */
+router.get("/logout", authMiddleware, logout);
 router.get("/auth/verify", authMiddleware, authVerify);
+
+/* ADMIN / SUPERADMIN ROUTES */
+router.post(
+  "/createUser",
+  authMiddleware,
+  // roleMiddleware("admin", "superadmin"),
+  CreateUser,
+);
+router.get("/getuser", authMiddleware, getUser);
+router.get("/getsingleuser", authMiddleware, singleUser);
+router.patch("/userStatus", authMiddleware, userStatus);
+router.patch("/changepassword", authMiddleware, HandlePassword);
+router.delete("/deleteUser", authMiddleware, deleteUser);
+router.put("/updateUser", authMiddleware, updateUser);
 
 export default router;
