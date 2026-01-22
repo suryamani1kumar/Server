@@ -19,7 +19,6 @@ export const updateBlog = async (req: Request, res: Response) => {
         (file) => `${config.SERVER_URL}/image/${file.filename}?w=200`,
       ) || [];
 
-    /* ---------- Body ---------- */
     const {
       content,
       metaTitle,
@@ -28,14 +27,12 @@ export const updateBlog = async (req: Request, res: Response) => {
       pageUrl,
       heading,
       category,
-      active,
+      isActive,
       faqs,
-      authorName,
-      authorDescription,
+      author,
       userid,
     } = req.body;
 
-    /* ---------- Safe FAQ Parsing ---------- */
     let parsedFaqs: any[] = [];
     if (faqs) {
       try {
@@ -46,7 +43,6 @@ export const updateBlog = async (req: Request, res: Response) => {
       }
     }
 
-    /* ---------- Update ---------- */
     const updatedBlog = await Blogs.findOneAndUpdate(
       { pageUrl: pageurl },
       {
@@ -58,12 +54,11 @@ export const updateBlog = async (req: Request, res: Response) => {
           pageUrl,
           heading,
           category,
-          active,
+          isActive,
           faqs: parsedFaqs,
           ...(images.length > 0 && { images }),
-          authorName,
-          authorDescription,
-          userid,
+          author,
+          createdBy: userid,
         },
       },
       {
@@ -91,10 +86,10 @@ export const updateBlog = async (req: Request, res: Response) => {
 export const blogStatus = async (req: Request, res: Response) => {
   try {
     const pageUrl = req.query.pageurl;
-    const active = req.query.active;
+    const isActive = req.query.isActive;
     const updatedBlog = await Blogs.findOneAndUpdate(
       { pageUrl },
-      { active },
+      { isActive },
       {
         new: true,
       },
