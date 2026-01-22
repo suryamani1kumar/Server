@@ -1,6 +1,6 @@
 import express, { Express } from "express";
 import connectToDataBase from "./DBConnection";
-import configMiddlewares from "./middlewares/config.middleware";
+import { middlewares } from "./middlewares/config.middleware";
 import { protectedRoutes, publicRoutes } from "./routes/all.routes";
 import { getImage } from "./controllers/image/image.controller";
 import defaultUser from "./config/defaultUser";
@@ -14,7 +14,7 @@ app.use("/image/:filename", getImage);
 // public Routes
 // app.use("/api", publicRoutes);
 
-configMiddlewares.forEach((middlewares) => app.use(middlewares));
+middlewares.forEach((middleware) => app.use(middleware));
 
 // private Routes
 app.use("/api", protectedRoutes);
