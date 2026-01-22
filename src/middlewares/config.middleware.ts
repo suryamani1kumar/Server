@@ -1,19 +1,43 @@
-import authenticateApiKey from './header.Auth';
-import cors from 'cors';
-import express, { RequestHandler } from 'express';
-import cookieParser from 'cookie-parser';
-import { config } from '../config/config';
+import authenticateApiKey from "./header.Auth";
+import cors from "cors";
+import express, {
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+} from "express";
+import cookieParser from "cookie-parser";
+import { config } from "../config/config";
 
 const corsOptions = {
   origin: config.ORIGIN,
   credentials: true,
 };
 
-const middlewares: RequestHandler[] = [
+export const middlewares: RequestHandler[] = [
   cors(corsOptions),
   express.json(),
   cookieParser(),
   authenticateApiKey,
 ];
 
-export default middlewares;
+// export const roleMiddleware =
+//   (...allowedRoles: string[]) =>
+//   (req: Request, res: Response, next: NextFunction) => {
+//     console.log(req)
+//     if (!req.user) {
+//       return res.status(401).json({
+//         success: false,
+//         message: "Unauthorized",
+//       });
+//     }
+
+//     if (!allowedRoles.includes(req.user.role)) {
+//       return res.status(403).json({
+//         success: false,
+//         message: "Access denied",
+//       });
+//     }
+
+//     next();
+//   };
