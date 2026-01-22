@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import saveJsonToFile from "../../services/saveJson";
 import { Blogs } from "../../models/blog.schema";
 import { config } from "../../config/config";
 
@@ -8,7 +7,7 @@ export const createBlog = async (req: Request, res: Response) => {
     const file = req.files;
     const Images = (file as Array<Express.Multer.File>)?.map(
       (image: Express.Multer.File) =>
-        `${config.SERVER_URL}/image/${image.filename}?w=200`
+        `${config.SERVER_URL}/image/${image.filename}?w=200`,
     );
     const {
       content,
@@ -18,28 +17,13 @@ export const createBlog = async (req: Request, res: Response) => {
       pageUrl,
       heading,
       category,
-      active,
+      isActive,
       faqs,
-      authorName,
-      authorDescription,
+      author,
       userid,
     } = req.body;
     const faq = JSON.parse(faqs);
-    // saveJsonToFile("blogData.json", {
-    //   content,
-    //   metaTitle,
-    //   metaDescription,
-    //   metaKeyword,
-    //   pageUrl,
-    //   heading,
-    //   category,
-    //   active,
-    //   faqs: faq,
-    //   images: Images,
-    //   authorName,
-    //   authorDescription,
-    //   userid,
-    // });
+
     const createblog = await new Blogs({
       content,
       metaTitle,
@@ -48,12 +32,11 @@ export const createBlog = async (req: Request, res: Response) => {
       pageUrl,
       heading,
       category,
-      active,
+      isActive,
       faqs: faq,
       images: Images,
-      authorName,
-      authorDescription,
-      userid,
+      author,
+      createdBy: userid,
     });
 
     await createblog.save();
