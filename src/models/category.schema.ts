@@ -5,7 +5,7 @@ export interface ICategory extends Document {
   slug: string;
   description?: string;
   image: string[];
-  userid: string;
+  createdBy: Types.ObjectId;
   parent: Types.ObjectId | null;
   active: boolean;
   createdAt: Date;
@@ -39,11 +39,7 @@ const categorySchema = new Schema<ICategory>(
       },
     ],
 
-    userid: {
-      type: String,
-      required: true,
-      index: true,
-    },
+   createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
     parent: {
       type: Schema.Types.ObjectId,
