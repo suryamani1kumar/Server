@@ -3,6 +3,7 @@ import blogRoutes from "./blog.routes";
 import Image from "./image.routes";
 import categoryRoutes from "./category.routes";
 import trackingRoutes from "./trackingpixel.routes";
+import Author from "./author.routes";
 
 export const protectedRoutes = [
   userRoutes,
@@ -10,5 +11,6 @@ export const protectedRoutes = [
   blogRoutes,
   Image,
   trackingRoutes,
+  Author,
 ];
 export const publicRoutes = [];
