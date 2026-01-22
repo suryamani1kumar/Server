@@ -11,7 +11,7 @@ export const getCategory = async (req: Request, res: Response) => {
         __v: 0,
         description: 0,
         image: 0,
-        userid: 0,
+        createdBy: 0,
       }
     );
     res.status(200).json({ message: "category data", data: getAllcCategory });
@@ -46,7 +46,7 @@ export const searchCategory = async (req: Request, res: Response) => {
         __v: 0,
         description: 0,
         image: 0,
-        userid: 0,
+        createdBy: 0,
       }
     );
     res.status(200).json({ message: "category data", data: category });
