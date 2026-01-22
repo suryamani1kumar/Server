@@ -7,7 +7,7 @@ export const getUser = async (req: Request, res: Response) => {
     const limit: number = parseInt(req.query.limit as string) || 4;
     const user = await User.find(
       {},
-      { name: 1, email: 1, isActive: 1, role: 1, username: 1, userid: 1 },
+      { name: 1, email: 1, isActive: 1, role: 1, username: 1 },
       {
         new: true,
       },
