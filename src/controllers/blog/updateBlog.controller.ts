@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Blogs } from "../../models/blog.schema";
-import { config } from "../../config/config";
 
 export const updateBlog = async (req: Request, res: Response) => {
   try {
@@ -10,14 +9,6 @@ export const updateBlog = async (req: Request, res: Response) => {
       res.status(400).json({ message: "pageurl is required" });
       return;
     }
-
-    /* ---------- Files (Images) ---------- */
-    const files = req.files as Express.Multer.File[] | undefined;
-
-    const images =
-      files?.map(
-        (file) => `${config.SERVER_URL}/image/${file.filename}?w=200`,
-      ) || [];
 
     const {
       content,
@@ -31,7 +22,28 @@ export const updateBlog = async (req: Request, res: Response) => {
       faqs,
       author,
       userid,
+      smallDescription,
     } = req.body;
+    
+    console.log("smallDescription",req.body)
+
+    const normalizedNewPageUrl =
+      pageUrl && typeof pageUrl === "string"
+        ? pageUrl.toLowerCase().trim().replace(/\s+/g, "-")
+        : undefined;
+
+    if (normalizedNewPageUrl && normalizedNewPageUrl !== pageurl) {
+      const existingBlog = await Blogs.findOne({
+        pageUrl: normalizedNewPageUrl,
+      });
+
+      if (existingBlog) {
+        res.status(409).json({
+          message: "Page URL already exists. Please choose another one.",
+        });
+        return;
+      }
+    }
 
     let parsedFaqs: any[] = [];
     if (faqs) {
@@ -51,14 +63,14 @@ export const updateBlog = async (req: Request, res: Response) => {
           metaTitle,
           metaDescription,
           metaKeyword,
-          pageUrl,
+          ...(normalizedNewPageUrl && { pageUrl: normalizedNewPageUrl }),
           heading,
           category,
           isActive,
+          smallDescription,
           faqs: parsedFaqs,
-          ...(images.length > 0 && { images }),
           author,
-          createdBy: userid,
+          updatedBy: userid,
         },
       },
       {
@@ -72,9 +84,10 @@ export const updateBlog = async (req: Request, res: Response) => {
       return;
     }
 
-    res
-      .status(200)
-      .json({ message: "Blog updated successfully", blog: updatedBlog });
+    res.status(200).json({
+      message: "Blog updated successfully",
+      blog: updatedBlog,
+    });
   } catch (error) {
     console.error("Update Blog Error:", error);
     res.status(500).json({
