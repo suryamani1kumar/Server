@@ -11,6 +11,7 @@ export interface IBlog extends Document {
   metaTitle: string;
   metaDescription: string;
   metaKeyword: string;
+  smallDescription: string;
   pageUrl: string;
   heading: string;
   category: Types.ObjectId;
@@ -21,6 +22,7 @@ export interface IBlog extends Document {
   createdBy: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
+  updatedBy: Types.ObjectId;
 }
 
 const BlogSchema: Schema<IBlog> = new Schema(
@@ -28,13 +30,15 @@ const BlogSchema: Schema<IBlog> = new Schema(
     content: { type: String, required: true },
     metaTitle: { type: String, required: true },
     metaDescription: { type: String, required: true },
-    metaKeyword: { type: String, required: true },
-    pageUrl: { type: String, required: true, unique: true },
+    metaKeyword: { type: String },
+    smallDescription: { type: String },
+    pageUrl: { type: String, required: true, unique: true, trim: true },
     heading: { type: String, required: true },
     category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
     author: { type: Schema.Types.ObjectId, ref: "Author" },
     isActive: { type: Boolean, default: false },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    updatedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     faqs: [
       {
         ques: { type: String },
