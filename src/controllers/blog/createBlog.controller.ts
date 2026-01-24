@@ -1,14 +1,8 @@
 import { Request, Response } from "express";
 import { Blogs } from "../../models/blog.schema";
-import { config } from "../../config/config";
 
 export const createBlog = async (req: Request, res: Response) => {
   try {
-    const file = req.files;
-    const Images = (file as Array<Express.Multer.File>)?.map(
-      (image: Express.Multer.File) =>
-        `${config.SERVER_URL}/image/${image.filename}?w=200`,
-    );
     const {
       content,
       metaTitle,
@@ -21,10 +15,22 @@ export const createBlog = async (req: Request, res: Response) => {
       faqs,
       author,
       userid,
+      smallDescription,
     } = req.body;
-    const faq = JSON.parse(faqs);
 
-    const createblog = await new Blogs({
+    // 🔹 1. Check if pageUrl already exists
+    const existingBlog = await Blogs.findOne({ pageUrl });
+
+    if (existingBlog) {
+      res.status(409).json({
+        message: "Page URL already exists. Please use a different URL.",
+      });
+      return;
+    }
+
+    const faq = faqs ? JSON.parse(faqs) : [];
+
+    const createblog = new Blogs({
       content,
       metaTitle,
       metaDescription,
@@ -34,14 +40,15 @@ export const createBlog = async (req: Request, res: Response) => {
       category,
       isActive,
       faqs: faq,
-      images: Images,
       author,
       createdBy: userid,
+      updatedBy: userid,
+      smallDescription,
     });
 
     await createblog.save();
 
-    res.status(200).json({ message: "blog Added", blog: createblog });
+    res.status(200).json({ message: "Blog added", blog: createblog });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }
