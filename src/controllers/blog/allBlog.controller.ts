@@ -34,7 +34,7 @@ export const allBlogWeb = async (req: Request, res: Response) => {
     const page: number = parseInt(req.query.page as string) || 1;
     const limit: number = parseInt(req.query.limit as string) || 4;
     const blog = await Blogs.find({ isActive: true })
-      .select("pageUrl heading smallDescription images")
+      .select("pageUrl heading smallDescription images createdAt updatedAt")
       .populate("category", "name")
       .populate("author", "name")
       .skip((page - 1) * limit)
@@ -57,3 +57,4 @@ export const allBlogWeb = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error", error });
   }
 };
+
