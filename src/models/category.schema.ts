@@ -6,8 +6,9 @@ export interface ICategory extends Document {
   description?: string;
   image: string[];
   createdBy: Types.ObjectId;
+  updatedBy: Types.ObjectId;
   parent: Types.ObjectId | null;
-  active: boolean;
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -39,8 +40,8 @@ const categorySchema = new Schema<ICategory>(
       },
     ],
 
-   createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
-
+    createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    updatedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     parent: {
       type: Schema.Types.ObjectId,
       ref: "Category",
@@ -54,12 +55,12 @@ const categorySchema = new Schema<ICategory>(
       },
     },
 
-    active: {
+    isActive: {
       type: Boolean,
       default: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 categorySchema.pre<ICategory>("save", async function (next) {
@@ -83,4 +84,3 @@ categorySchema.pre<ICategory>("save", async function (next) {
 });
 
 export const Category = mongoose.model<ICategory>("Category", categorySchema);
-
