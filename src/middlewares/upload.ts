@@ -1,44 +1,58 @@
 import multer, { FileFilterCallback } from "multer";
 import { Request } from "express";
-import path from "path";
-import fs from "fs";
+import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
+import { config } from "../config/config";
 
-// create image dir
-const uploadDir = path.join(process.cwd(), "public");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
+const storage = multer.memoryStorage();
 
-// Define file storage configuration
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir); // Save files in 'uploads/' folder
-  },
-
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`); // Unique filename
-  },
-});
-
-// Define file filter
 const fileFilter = (
-  req: Request,
+  _req: Request,
   file: Express.Multer.File,
   cb: FileFilterCallback
 ) => {
-  const allowedTypes = ["image/webp", "image/png", "application/pdf"];
+  const allowedTypes = [
+    "image/webp",
+    "image/png",
+    "image/jpeg",
+    "application/pdf",
+  ];
+
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Only images (Webp, PNG) and PDFs are allowed"));
+    cb(new Error("Only JPG, PNG, WEBP images and PDFs are allowed"));
   }
 };
 
-// Configure Multer
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 1 * 1024 * 1024 }, // 5MB limit
-  fileFilter: fileFilter,
+export const upload = multer({
+  storage,
+  limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+  fileFilter,
 });
 
-export default upload;
+cloudinary.config({
+  cloud_name: config.CLOUDINARY_CLOUD_NAME,
+  api_key: config.CLOUDINARY_API_KEY,
+  api_secret: config.CLOUDINARY_API_SECRET,
+});
+
+export { cloudinary };
+
+export const uploadBufferToCloudinary = (
+  buffer: Buffer,
+  folder: string,
+  resourceType: "image" | "raw" | "video" = "image"
+): Promise<UploadApiResponse> => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream(
+        { folder, resource_type: resourceType },
+        (error, result) => {
+          if (error) return reject(error);
+          if (!result) return reject(new Error("Upload failed"));
+          resolve(result);
+        }
+      )
+      .end(buffer);
+  });
+};

@@ -8,19 +8,18 @@ import {
 import { allBlog, allBlogWeb } from "../controllers/blog/allBlog.controller";
 import { searchBlog } from "../controllers/blog/searchBlog.controller";
 import { deleteBlog } from "../controllers/blog/deleteBlog.controller";
-import upload from "../middlewares/upload";
 
 const router = Router();
 
-router.post("/addBlog", upload.array("files", 5), createBlog);
+router.post("/addBlog", createBlog);
 router.get("/blog", getBlog);
 router.get("/allBlog", allBlog);
 router.get("/blogs/search", searchBlog);
-router.put("/updateBlog", upload.array("files", 5),updateBlog);
+router.put("/updateBlog", updateBlog);
 router.patch("/blogStatus", blogStatus);
 router.delete("/deleteBlog", deleteBlog);
 
-/*. Web api end point. */ 
+/*. Web api end point. */
 
 router.get("/blogBySlug", blogBySlug);
 router.get("/allBlogs", allBlogWeb);
