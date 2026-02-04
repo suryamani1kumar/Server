@@ -4,6 +4,10 @@ interface IFAQ {
   ques: string;
   ans: string;
 }
+type ImageType = {
+  url: string;
+  public_id: string;
+};
 
 // Define the Blog interface
 export interface IBlog extends Document {
@@ -18,7 +22,7 @@ export interface IBlog extends Document {
   author: Types.ObjectId;
   isActive: boolean;
   faqs: IFAQ[];
-  images: string[];
+  images: ImageType | null;
   createdBy: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
@@ -45,7 +49,19 @@ const BlogSchema: Schema<IBlog> = new Schema(
         ans: { type: String },
       },
     ],
-    images: [{ type: String }],
+    images: {
+      type: {
+        url: {
+          type: String,
+          trim: true,
+        },
+        public_id: {
+          type: String,
+          trim: true,
+        },
+      },
+      default: null,
+    },
   },
   { timestamps: true },
 );

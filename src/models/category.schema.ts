@@ -1,10 +1,14 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
+type ImageType = {
+  url: string;
+  public_id: string;
+};
 export interface ICategory extends Document {
   name: string;
   slug: string;
   description?: string;
-  image: string[];
+  image: ImageType | null;
   createdBy: Types.ObjectId;
   updatedBy: Types.ObjectId;
   parent: Types.ObjectId | null;
@@ -33,12 +37,19 @@ const categorySchema = new Schema<ICategory>(
       trim: true,
     },
 
-    image: [
-      {
-        type: String,
-        trim: true,
+    image: {
+      type: {
+        url: {
+          type: String,
+          trim: true,
+        },
+        public_id: {
+          type: String,
+          trim: true,
+        },
       },
-    ],
+      default: null,
+    },
 
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     updatedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },

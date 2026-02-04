@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 export const AddCategory = async (req: Request, res: Response) => {
   try {
-    const { name, slug, description, createdBy, updatedBy, parent, isActive } =
+    const { name, slug, description, createdBy,image, updatedBy, parent, isActive } =
       req.body;
 
     if (!name || !slug) {
@@ -26,7 +26,7 @@ export const AddCategory = async (req: Request, res: Response) => {
       updatedBy,
       parent: parent || null,
       isActive: isActive ?? true,
-      image: [],
+      image: image,
     });
 
     const savedData = await categoryData.save();
@@ -45,7 +45,7 @@ export const AddCategory = async (req: Request, res: Response) => {
 export const UpdateCategory = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, slug, description, updatedBy, parent, isActive } = req.body;
+    const { name, slug, description, updatedBy, image,parent, isActive } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(400).json({ message: "Invalid category ID" });
@@ -79,6 +79,7 @@ export const UpdateCategory = async (req: Request, res: Response) => {
         updatedBy,
         parent: parent || null,
         isActive: isActive ?? true,
+        image:image
       },
       { new: true },
     );

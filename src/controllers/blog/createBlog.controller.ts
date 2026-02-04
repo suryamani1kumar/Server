@@ -16,6 +16,7 @@ export const createBlog = async (req: Request, res: Response) => {
       author,
       userid,
       smallDescription,
+      images,
     } = req.body;
 
     // 🔹 1. Check if pageUrl already exists
@@ -28,7 +29,7 @@ export const createBlog = async (req: Request, res: Response) => {
       return;
     }
 
-    const faq = faqs ? JSON.parse(faqs) : [];
+    const faq = Array.isArray(faqs) ? faqs : [];
 
     const createblog = new Blogs({
       content,
@@ -40,6 +41,7 @@ export const createBlog = async (req: Request, res: Response) => {
       category,
       isActive,
       faqs: faq,
+      images,
       author,
       createdBy: userid,
       updatedBy: userid,
@@ -50,6 +52,7 @@ export const createBlog = async (req: Request, res: Response) => {
 
     res.status(200).json({ message: "Blog added", blog: createblog });
   } catch (error) {
+    console.log("error", error);
     res.status(500).json({ message: "Internal server error", error });
   }
 };

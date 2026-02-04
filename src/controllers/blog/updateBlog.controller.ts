@@ -23,9 +23,8 @@ export const updateBlog = async (req: Request, res: Response) => {
       author,
       userid,
       smallDescription,
+      images,
     } = req.body;
-    
-    console.log("smallDescription",req.body)
 
     const normalizedNewPageUrl =
       pageUrl && typeof pageUrl === "string"
@@ -67,6 +66,7 @@ export const updateBlog = async (req: Request, res: Response) => {
           heading,
           category,
           isActive,
+          images,
           smallDescription,
           faqs: parsedFaqs,
           author,
