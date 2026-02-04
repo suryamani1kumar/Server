@@ -64,7 +64,7 @@ export const userLogin = async (req: Request, res: Response): Promise<void> => {
     } else {
       cookieOptions.secure = true;
       cookieOptions.sameSite = "none";
-      // cookieOptions.domain = "admincrm-three.vercel.app";
+      cookieOptions.domain = "cms.tourmingle.com";
     }
 
     res.cookie("accessToken", accessToken, cookieOptions);
