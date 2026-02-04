@@ -13,7 +13,7 @@ export const logout = (req: Request, res: Response) => {
   } else {
     cookieOptions.secure = true;
     cookieOptions.sameSite = "none";
-    // cookieOptions.domain = "admincrm-three.vercel.app";
+    cookieOptions.domain = "cms.tourmingle.com";
   }
 
   // ✅ Clear cookies
@@ -22,5 +22,6 @@ export const logout = (req: Request, res: Response) => {
 
   res.status(200).json({ message: "Logout successful" });
 };
+
 
 
