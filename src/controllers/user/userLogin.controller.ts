@@ -64,7 +64,7 @@ export const userLogin = async (req: Request, res: Response): Promise<void> => {
     } else {
       cookieOptions.secure = true;
       cookieOptions.sameSite = "none";
-      cookieOptions.domain = "cms.tourmingle.com";
+      cookieOptions.domain = ".tourmingle.com";
     }
 
     res.cookie("accessToken", accessToken, cookieOptions);
