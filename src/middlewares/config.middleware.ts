@@ -16,7 +16,7 @@ const corsOptions = {
 
 export const middlewares: RequestHandler[] = [
   cors(corsOptions),
-  express.json(),
+  express.json({ limit: "5mb" }),
   cookieParser(),
   authenticateApiKey,
 ];
@@ -41,3 +41,4 @@ export const middlewares: RequestHandler[] = [
 
 //     next();
 //   };
+
