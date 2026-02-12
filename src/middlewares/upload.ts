@@ -8,25 +8,20 @@ const storage = multer.memoryStorage();
 const fileFilter = (
   _req: Request,
   file: Express.Multer.File,
-  cb: FileFilterCallback
+  cb: FileFilterCallback,
 ) => {
-  const allowedTypes = [
-    "image/webp",
-    "image/png",
-    "image/jpeg",
-    "application/pdf",
-  ];
+  const allowedTypes = ["image/webp", "image/png", "image/jpeg"];
 
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Only JPG, PNG, WEBP images and PDFs are allowed"));
+    cb(new Error("Only JPG, PNG and WEBP images are allowed"));
   }
 };
 
 export const upload = multer({
   storage,
-  limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+  limits: { fileSize: 500 * 1024 }, // 500KB
   fileFilter,
 });
 
@@ -41,7 +36,7 @@ export { cloudinary };
 export const uploadBufferToCloudinary = (
   buffer: Buffer,
   folder: string,
-  resourceType: "image" | "raw" | "video" = "image"
+  resourceType: "image" | "raw" | "video" = "image",
 ): Promise<UploadApiResponse> => {
   return new Promise((resolve, reject) => {
     cloudinary.uploader
@@ -51,7 +46,7 @@ export const uploadBufferToCloudinary = (
           if (error) return reject(error);
           if (!result) return reject(new Error("Upload failed"));
           resolve(result);
-        }
+        },
       )
       .end(buffer);
   });
