@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { cloudinary, uploadBufferToCloudinary } from "../../middlewares/upload";
+import { fileSave } from "../../models/media.schema";
 
 export const uploadFile = async (req: Request, res: Response) => {
   try {
@@ -46,5 +47,49 @@ export const deleteUploadFile = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const AddFile = async (req: Request, res: Response) => {
+  try {
+    const { url, public_id } = req.body;
+
+    if (!url || !public_id) {
+      res.status(400).json({ message: "url and public_id are required" });
+      return;
+    }
+
+    const file = new fileSave({
+      url,
+      public_id,
+    });
+
+    const savedData = await file.save();
+
+    res
+      .status(201)
+      .json({ message: "file Save successfully", data: savedData });
+  } catch (error: any) {
+    res.status(500).json({
+      message: "Failed to Save file",
+      error: error.message || error,
+    });
+  }
+};
+
+export const GetAllFile = async (req: Request, res: Response) => {
+  try {
+    const getfile = await fileSave.find();
+
+    res.status(200).json({
+      message: "file fetched successfully",
+      data: getfile,
+    });
+    
+  } catch (error: any) {
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message || error,
+    });
   }
 };
