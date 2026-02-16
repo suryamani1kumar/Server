@@ -18,6 +18,7 @@ export const userLogin = async (req: Request, res: Response): Promise<void> => {
     }
 
     const query = {
+      isActive: true,
       $or: [{ username: userIdOrmail }, { email: userIdOrmail }],
     };
 
