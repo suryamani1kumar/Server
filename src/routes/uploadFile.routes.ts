@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   AddFile,
+  deleteFile,
   deleteUploadFile,
   GetAllFile,
   uploadFile,
@@ -13,5 +14,6 @@ router.post("/upload", upload.single("file"), uploadFile);
 router.delete("/fileDelete", deleteUploadFile);
 router.post("/saveFile", AddFile);
 router.get("/getFile", GetAllFile);
+router.delete("/deleteFile", deleteFile);
 
 export default router;
