@@ -45,7 +45,7 @@ export const singleUser = async (
       return;
     }
 
-    const user = await User.findById(id);
+    const user = await User.findById(id).select("-permission -lastLogin");
 
     if (!user) {
       res.status(404).json({ message: "User does not exist" });
