@@ -3,7 +3,20 @@ import { Destinations } from "../../models/destination.schema";
 
 export const createDestination = async (req: Request, res: Response) => {
   try {
-    const destination = await Destinations.create(req.body);
+    const slug = req.body.slug;
+
+    const existingDestinations = await Destinations.findOne({ slug: slug });
+
+    if (existingDestinations) {
+      res.status(409).json({
+        message: "Page slug already exists. Please use a different slug.",
+      });
+      return;
+    }
+
+    const faq = Array.isArray(req.body.faqs) ? req.body.faqs : [];
+
+    const destination = await Destinations.create({ ...req.body, faq, slug });
 
     res.status(201).json({
       success: true,
@@ -37,9 +50,13 @@ export const getAllDestinations = async (req: Request, res: Response) => {
   }
 };
 
-export const getDestinationById = async (req: Request, res: Response) => {
+export const getDestinationBySlug = async (req: Request, res: Response) => {
   try {
-    const destination = await Destinations.findById(req.params.id)
+    const slug = req.query.slug;
+
+    const destination = await Destinations.findOne({
+      slug: slug,
+    })
       .populate("author")
       .populate("country")
       .populate("city");
@@ -66,8 +83,18 @@ export const getDestinationById = async (req: Request, res: Response) => {
 
 export const updateDestination = async (req: Request, res: Response) => {
   try {
-    const updated = await Destinations.findByIdAndUpdate(
-      req.params.id,
+    const { slug } = req.query;
+
+    if (!slug) {
+      res.status(400).json({
+        success: false,
+        message: "Slug is required",
+      });
+      return;
+    }
+
+    const updated = await Destinations.findOneAndUpdate(
+      { slug: slug },
       req.body,
       { new: true, runValidators: true },
     );
@@ -94,7 +121,8 @@ export const updateDestination = async (req: Request, res: Response) => {
 
 export const deleteDestination = async (req: Request, res: Response) => {
   try {
-    const deleted = await Destinations.findByIdAndDelete(req.params.id);
+    const { slug } = req.query;
+    const deleted = await Destinations.findOneAndDelete({ slug });
 
     if (!deleted) {
       res.status(404).json({
