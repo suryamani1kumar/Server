@@ -9,13 +9,12 @@ type ImageType = {
   public_id: string;
 };
 
-// Define the Blog interface
 export interface IDestination extends Document {
   content: string;
   metaTitle: string;
   metaDescription: string;
   smallDescription: string;
-  pageUrl: string;
+  slug: string;
   heading: string;
   author: Types.ObjectId;
   country: Types.ObjectId;
@@ -35,7 +34,7 @@ const DestinationSchema: Schema<IDestination> = new Schema(
     metaTitle: { type: String, required: true },
     metaDescription: { type: String, required: true },
     smallDescription: { type: String },
-    pageUrl: { type: String, required: true, unique: true, trim: true },
+    slug: { type: String, required: true, unique: true, trim: true },
     heading: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: "Author" },
     country: { type: Schema.Types.ObjectId, ref: "Location" },
