@@ -120,7 +120,7 @@ export const updateLocation = async (req: Request, res: Response) => {
 
 export const getLocation = async (req: Request, res: Response) => {
   try {
-    const locations = await Location.find();
+    const locations = await Location.find().populate("parent", "name");
 
     res.json({
       success: true,
@@ -136,32 +136,21 @@ export const getLocation = async (req: Request, res: Response) => {
   }
 };
 
-export const getCountry = async (req: Request, res: Response) => {
+export const getLocationsByType = async (req: Request, res: Response) => {
   try {
-    const country = await Location.find({ type: "country" });
+    const { type } = req.query;
+
+    const filter: any = {};
+    if (type) {
+      filter.type = type;
+    }
+
+    const locations = await Location.find(filter)
 
     res.json({
       success: true,
-      message: "Country fetched successfully",
-      country,
-    });
-  } catch (err: any) {
-    console.error(err.message);
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-    });
-  }
-};
-
-export const getCity = async (req: Request, res: Response) => {
-  try {
-    const city = await Location.find({ type: "city" });
-
-    res.json({
-      success: true,
-      message: "City fetched successfully",
-      city,
+      message: `${type || "All"} locations fetched successfully`,
+      locations,
     });
   } catch (err: any) {
     console.error(err.message);
