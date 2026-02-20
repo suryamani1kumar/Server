@@ -56,11 +56,8 @@ export const getDestinationBySlug = async (req: Request, res: Response) => {
 
     const destination = await Destinations.findOne({
       slug: slug,
-    })
-      .populate("author")
-      .populate("country")
-      .populate("city");
-
+    });
+    
     if (!destination) {
       res.status(404).json({
         success: false,
@@ -141,5 +138,29 @@ export const deleteDestination = async (req: Request, res: Response) => {
       success: false,
       message: error.message,
     });
+  }
+};
+
+export const destinationStatus = async (req: Request, res: Response) => {
+  try {
+    const slug = req.query.slug;
+    const isActive = req.query.isActive;
+    const updatedDestination = await Destinations.findOneAndUpdate(
+      { slug },
+      { isActive },
+      {
+        new: true,
+      },
+    );
+
+    if (!updatedDestination) {
+      res.status(404).json({ message: "Destination not found" });
+      return;
+    }
+    res
+      .status(200)
+      .json({ message: "Destination updated", blog: updatedDestination });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
   }
 };
