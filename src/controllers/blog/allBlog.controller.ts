@@ -8,6 +8,7 @@ export const allBlog = async (req: Request, res: Response) => {
     const blog = await Blogs.find()
       .select("pageUrl heading isActive")
       .populate("category", "name")
+      .sort({ createdAt: -1 }) 
       .skip((page - 1) * limit)
       .limit(limit)
       .lean();
@@ -37,6 +38,7 @@ export const allBlogWeb = async (req: Request, res: Response) => {
       .select("pageUrl heading smallDescription images createdAt updatedAt")
       .populate("category", "name")
       .populate("author", "name")
+      .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
       .lean();
