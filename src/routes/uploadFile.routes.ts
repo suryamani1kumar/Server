@@ -1,19 +1,32 @@
 import { Router } from "express";
 import {
-  AddFile,
-  deleteFile,
-  deleteUploadFile,
-  GetAllFile,
-  uploadFile,
-} from "../controllers/uploadfile/uploadfile.controller";
-import { upload } from "../middlewares/upload";
+  createLocation,
+  getLocation,
+  getLocationsByType,
+} from "../controllers/destination/location.controller";
+import {
+  allDestinationWeb,
+  createDestination,
+  deleteDestination,
+  destinationStatus,
+  getAllDestinations,
+  getDestinationBySlug,
+  getDesWebBySlug,
+  updateDestination,
+} from "../controllers/destination/destination.controller";
 
 const router = Router();
 
-router.post("/upload", upload.single("file"), uploadFile);
-router.delete("/fileDelete", deleteUploadFile);
-router.post("/saveFile", AddFile);
-router.get("/getFile", GetAllFile);
-router.delete("/deleteFile", deleteFile);
+router.post("/addlocation", createLocation);
+router.get("/getlocation", getLocation);
+router.get("/getLocationsByType",getLocationsByType)
+router.post("/adddestination", createDestination);
+router.put("/updatedestination", updateDestination);
+router.get("/getdestination", getAllDestinations);
+router.get("/slugdestination", getDestinationBySlug);
+router.get("/getDesWebBySlug", getDesWebBySlug);
+router.delete("/deleteDes", deleteDestination);
+router.patch("/destinationStatus", destinationStatus);
+router.get("/allDestinationWeb", allDestinationWeb);
 
 export default router;
