@@ -57,7 +57,6 @@ export const getDestinationBySlug = async (req: Request, res: Response) => {
     const destination = await Destinations.findOne({
       slug: slug,
     });
-    
     if (!destination) {
       res.status(404).json({
         success: false,
@@ -162,5 +161,67 @@ export const destinationStatus = async (req: Request, res: Response) => {
       .json({ message: "Destination updated", blog: updatedDestination });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+export const allDestinationWeb = async (req: Request, res: Response) => {
+  try {
+    const page: number = parseInt(req.query.page as string) || 1;
+    const limit: number = parseInt(req.query.limit as string) || 4;
+    const destinations = await Destinations.find({ isActive: true })
+      .select("slug heading country city images createdAt updatedAt")
+      .populate("author", "name")
+      .populate("country", "name slug")
+      .populate("city", "name slug")
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean();
+
+    if (!destinations) {
+      res.status(404).json({ message: "Destination is not exist" });
+      return;
+    }
+    const totalCount: number = await Destinations.countDocuments();
+    res.status(200).json({
+      message: "destination fetch All",
+      page,
+      limit,
+      totalPages: Math.ceil(totalCount / limit),
+      totalDestinations: totalCount,
+      destinations: destinations,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+export const getDesWebBySlug = async (req: Request, res: Response) => {
+  try {
+    const slug = req.query.slug;
+
+    const destination = await Destinations.findOne({
+      slug: slug,
+    })
+      .populate("author", "name")
+      .populate("country", "name slug")
+      .populate("city", "name slug");
+
+    if (!destination) {
+      res.status(404).json({
+        success: false,
+        message: "Destination not found",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      data: destination,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
