@@ -13,7 +13,6 @@ export interface IDestination extends Document {
   content: string;
   metaTitle: string;
   metaDescription: string;
-  smallDescription: string;
   slug: string;
   heading: string;
   author: Types.ObjectId;
@@ -33,7 +32,6 @@ const DestinationSchema: Schema<IDestination> = new Schema(
     content: { type: String, required: true },
     metaTitle: { type: String, required: true },
     metaDescription: { type: String, required: true },
-    smallDescription: { type: String },
     slug: { type: String, required: true, unique: true, trim: true },
     heading: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: "Author" },
