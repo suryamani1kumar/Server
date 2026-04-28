@@ -5,6 +5,7 @@ import Author from "./author.routes";
 import Sitemap from "./sitemap.routes";
 import uploadImage from "./uploadFile.routes";
 import destination from "./deslocation.routes";
+import Package from "./package.routes"
 
 export const protectedRoutes = [
   userRoutes,
@@ -13,5 +14,6 @@ export const protectedRoutes = [
   Author,
   Sitemap,
   uploadImage,
-  destination
+  destination,
+  Package
 ];
